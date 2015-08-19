@@ -62,7 +62,7 @@ extension CollectionType where Index : RandomAccessIndexType {
 
 class foldrTests: XCTestCase {
     var data:[Int] = []
-    let count = 1000
+    let count = 10000
     let loop = 1000
     override func setUp() {
         super.setUp()
@@ -140,16 +140,6 @@ class foldrTests: XCTestCase {
         self.measureBlock {
             for var i = 0; i < self.loop; i++ {
                 self.data.foldr_reduce2(1) { (x, accm) -> Int in
-                    return accm + x / 2
-                }
-            }
-        }
-    }
-    
-    func test_reduce() {
-        self.measureBlock {
-            for var i = 0; i < self.loop; i++ {
-                self.data.reverse().reduce(1) { (x, accm) -> Int in
                     return accm + x / 2
                 }
             }
