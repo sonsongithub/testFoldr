@@ -36,6 +36,10 @@ extension CollectionType {
     func foldr_reduce<T>(accm:T, @noescape f: (T, Self.Generator.Element) -> T) -> T {
         return self.reverse().reduce(accm) { f($0, $1) }
     }
+    
+    func foldl_reduce<T>(accm:T, @noescape f: (T, Self.Generator.Element) -> T) -> T {
+        return self.reduce(accm) { f($0, $1) }
+    }
 }
 
 extension CollectionType where Index : RandomAccessIndexType {
@@ -62,7 +66,7 @@ extension CollectionType where Index : RandomAccessIndexType {
 
 class foldrTests: XCTestCase {
     var data:[Int] = []
-    let count = 10000
+    let count = 1000
     let loop = 1000
     override func setUp() {
         super.setUp()
@@ -70,6 +74,16 @@ class foldrTests: XCTestCase {
             data.removeAll()
             for var i = 0; i < count; i++ {
                 data.append(Int(arc4random() % 10 + 1))
+            }
+        }
+    }
+    
+    func test_ref_foldl() {
+        self.measureBlock {
+            for var i = 0; i < self.loop; i++ {
+                self.data.foldl_reduce(1) { (x, accm) -> Int in
+                    return accm + x / 2
+                }
             }
         }
     }
